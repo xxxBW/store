@@ -42,21 +42,27 @@ seajs.use方法调用了Module.preload(callback)这个方法，在这里传入�
 ### 5.调用Module.use(ids, callback, uri)
 这里调用Module.get来获取模块实例，并且设置了当前模块的callback，然后对该模块调用load方法，如果有传入callback方法，则用apply使该方法在global下调用
 ### 6.调用Module.prototype.load()
-把当前模块的状态设为LOADING: 3
+> 把当前模块的状态设为LOADING: 3
+
 在这里首先获取该模块的所有依赖，遍历依赖模块，如果依赖模块还没请求，则调用Module.prototype.fetch(requestCache)请求依赖模块，如果依赖模块数为0，则该模块执行onload操作
 ### 7.Module.prototype.fetch(requestCache)
-把当前模块的状态设为FETCHING: 1
-这里是请求操作，这里调用了request函数，发起HTTP请求请求当前模块，这里设置了onRequest函数，请求完毕之后调用onRequest函数，这里调用了Module.save(uri, meta)，保存模块信息之后看看callbackList的模块，再调用load方法，回到步骤6
+> 把当前模块的状态设为FETCHING: 1
+
+这里是请求操作，这里调用了request函数，发起HTTP请求请求当前模块，这里设置了onRequest函数，请求完毕之后调用onRequest函数，这里调用了Module.save(uri, meta)，保存模块信息之后看看callbackList的模块，再调用load方法，回到**步骤6**
 ### 8.Module.save(uri, meta)
-把当前模块的状态设为SAVED: 2
+> 把当前模块的状态设为SAVED: 2
+
 这里把当前模块的信息保存到cachedMods对象中
 ### 9.Module.prototype.onload
-把当前模块的状态设为LOADED: 4
-执行到这里的时候，表示当前模块的依赖全部加载完毕或者该模块没有依赖模块，如果该模块有callback函数（Module.use设置的），则调用callback函数，获取依赖该模块的模块，然后遍历，设当前模块为mod，依赖该模块的模块为m，m的_remain等于m的_remain减去mod的_waitings，如果m的_remain为0，表示m模块的依赖全部加载完毕，执行onload操作，又再一次执行步骤9
+> 把当前模块的状态设为LOADED: 4
+
+执行到这里的时候，表示当前模块的依赖全部加载完毕或者该模块没有依赖模块，如果该模块有callback函数（Module.use设置的），则调用callback函数，获取依赖该模块的模块，然后遍历，设当前模块为mod，依赖该模块的模块为m，m的_remain等于m的_remain减去mod的_waitings，如果m的_remain为0，表示m模块的依赖全部加载完毕，执行onload操作，又再一次执行**步骤9**
 ### 10.mod.callback
 这里是模块的回调函数，调用Module.use的时候就会给模块设置callback函数，这里遍历当前模块的依赖模块，然后调用Module.prototype.exec执行依赖模块
 ### 11.Module.prototype.exec
-把当前模块的状态设为EXECUTING: 5
-设置了require方法，判断mod.factory是不是一个函数，如果是则调用该方法，并且传入(require,exports,module),如果factory中需要require其他方法时会调用这里设置的require方法，获取该模块并执行exec方法，又再一次执行步骤11
-把当前模块的状态设为EXECUTED: 6
+> 把当前模块的状态设为EXECUTING: 5
+
+设置了require方法，判断mod.factory是不是一个函数，如果是则调用该方法，并且传入(require,exports,module),如果factory中需要require其他方法时会调用这里设置的require方法，获取该模块并执行exec方法，又再一次执行**步骤11**
+> 把当前模块的状态设为EXECUTED: 6
+
 到这里，所有模块加载并且执行结束
