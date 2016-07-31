@@ -8,25 +8,29 @@
 suatus      | description
 ------------|------------
 FETCHING: 1 | 模块正在请求中
-SAVED: 2    |    模块已经下载完毕
-LOADING: 3  |    模块依赖准备中
-LOADED: 4   |   模块依赖准备完毕
-EXECUTING: 5|   模块正在执行
-EXECUTED: 6 |   模块执行完毕
+SAVED: 2    | 模块已经下载完毕
+LOADING: 3  | 模块依赖准备中
+LOADED: 4   | 模块依赖准备完毕
+EXECUTING: 5| 模块正在执行
+EXECUTED: 6 | 模块执行完毕
 
 ## 几个全局变量
-* cachedMods（uri : mod）       所有模块信息
-* fetchingList（uri : true）    正在请求的模块队列
-* fetchedList（uri : true）     请求完毕的模块队列
-* callbackList（uri : mod）     需要回调的模块队列
+suatus      | description
+------------|------------
+cachedMods（uri : mod）| 所有模块信息
+fetchingList（uri : true）|正在请求的模块队列
+fetchedList（uri : true）|请求完毕的模块队列
+callbackList（uri : mod）|需要回调的模块队列
 
 ## 一个模块信息
-* uri               模块的uri
-* dependencies      模块的依赖模块
-* exports           模块返回值
-* status            模块状态
-* _waitings         依赖该模块的模块数
-* _remain           没有准备完的依赖模块数
+suatus      | description
+------------|------------
+uri           |    模块的uri
+dependencies   |   模块的依赖模块
+exports      |     模块返回值
+status      |      模块状态
+_waitings     |    依赖该模块的模块数
+_remain       |    没有准备完的依赖模块数
 
 ## 下面我们一步一步来看看seajs模块到底是怎么加载的
 1. 引入seajs文件
